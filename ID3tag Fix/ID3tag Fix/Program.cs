@@ -11,12 +11,18 @@ namespace ID3tag_Fix
         static void Main(string[] args)
         {
             Parser parser = new Parser();
+            OpNumber opNumber = new OpNumber();
             string path = @"Z:\ID3\Billy Idol - Eyes Without a Face.mp3";
             string newPath = @"Z:\ID3\Remake\Billy Idol - Eyes Without a Face.mp3";
             File.Copy(path, newPath, true);
             using (FileStream audio = new FileStream(newPath, FileMode.Open))
             {
-                parser.Parsing(audio, 0, true);
+                byte[] temp = new byte[6];
+                temp=parser.Parsing(audio, 0, true);
+                Console.WriteLine(opNumber.Arr7BitToNum(temp));
+                Console.WriteLine(opNumber.Arr8BitoNum(temp));
+                opNumber.NumtoArr7Bit(23093249);
+                opNumber.NumtoArr8Bit(23093249);
             }
         }
     }

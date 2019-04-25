@@ -16,7 +16,7 @@ namespace ID3tag_Fix
 
             for (sbyte i = (sbyte)(sizeArr-1);i>sizeArr-4;i--)
             {
-                size += storage[sizeArr - i+sizeDiff] << (8 * (i-sizeDiff) - i-sizeDiff);
+                size += storage[sizeArr-1 - i+sizeDiff] << (8 * (i-sizeDiff) - i+sizeDiff);
             }
             size += storage[sizeArr - 1];
             return size;
@@ -29,10 +29,34 @@ namespace ID3tag_Fix
 
             for (sbyte i = (sbyte)(sizeArr - 1); i > sizeArr - 4; i--)
             {
-                size += storage[sizeArr - i + sizeDiff] << (8 * (i - sizeDiff));
+                size += storage[sizeArr-1 - i + sizeDiff] << (8 * (i - sizeDiff));
             }
             size += storage[sizeArr - 1];
             return size;
+        }
+        public byte[] NumtoArr7Bit(long size)
+        {
+            byte[] storage = new byte[4];
+            byte mask = 127;
+            for(sbyte i=3;i>0;i--)
+            {
+                storage[i] = (byte)(size & mask);
+                size >>= 7;
+            }
+            storage[0] = (byte)(size & mask);
+            return storage;
+        }
+        public byte[] NumtoArr8Bit(long size)
+        {
+            byte[] storage = new byte[4];
+            byte mask = 255;
+            for (sbyte i = 3; i > 0; i--)
+            {
+                storage[i] = (byte)(size & mask);
+                size >>= 8;
+            }
+            storage[0] = (byte)(size & mask);
+            return storage;
         }
     }
 }
