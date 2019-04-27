@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace ID3tag_Fix
 {
@@ -12,7 +13,7 @@ namespace ID3tag_Fix
         private string name;
         private long size;
         private long dataPos;
-        private string storage;
+        private string storage="";
         //private byte ver;
         /*public Frame(byte ver)
         {
@@ -65,6 +66,26 @@ namespace ID3tag_Fix
             {
                 return dataPos;
             }
+        }
+        public void DecodeStorage(FileStream audio)
+        {
+            if (name != "APIC")
+            {
+                byte[] tArr = new byte[size];
+                audio.Seek(dataPos, 0);
+                audio.Read(tArr, 0, (int)size);
+                for (uint i = 0; i < size; i++)
+                    storage += (char)tArr[i];
+            }
+        }
+        public void OutTag()
+        {
+            Console.WriteLine("-----------------");
+            Console.WriteLine("Tag name: {0}", Name);
+            Console.WriteLine("Tag contains: {0}", Storage);
+            Console.WriteLine("Tag begin position: {0}", dataPos-10);
+            Console.WriteLine("Tag size: {0}", Size);
+            Console.WriteLine("-----------------");
         }
     }
 }
