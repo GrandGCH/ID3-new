@@ -12,7 +12,7 @@ namespace ID3tag_Fix
         {
             byte sizeArr = (byte)storage.Length;
             long size = 0;
-            byte sizeDiff = (byte)(sizeArr == 6 ? 2 : 4);
+            byte sizeDiff = (byte)(sizeArr == 6 ? 2 : 4); //На входе массив Заголовка или Фрейма
 
             for (sbyte i = (sbyte)(sizeArr-1);i>sizeArr-4;i--)
             {

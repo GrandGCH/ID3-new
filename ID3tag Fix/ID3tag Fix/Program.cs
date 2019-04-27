@@ -12,17 +12,24 @@ namespace ID3tag_Fix
         {
             Parser parser = new Parser();
             OpNumber opNumber = new OpNumber();
-            string path = @"Z:\ID3\Billy Idol - Eyes Without a Face.mp3";
-            string newPath = @"Z:\ID3\Remake\Billy Idol - Eyes Without a Face.mp3";
+            string path = @"Z:\ID3\Downplay - The One Who Laughs Last.mp3";
+            string newPath = @"Z:\ID3\Remake\Downplay - The One Who Laughs Last.mp3";
             File.Copy(path, newPath, true);
             using (FileStream audio = new FileStream(newPath, FileMode.Open))
             {
-                byte[] temp = new byte[6];
-                temp=parser.Parsing(audio, 0, true);
-                Console.WriteLine(opNumber.Arr7BitToNum(temp));
-                Console.WriteLine(opNumber.Arr8BitoNum(temp));
-                opNumber.NumtoArr7Bit(23093249);
-                opNumber.NumtoArr8Bit(23093249);
+                Header header = new Header(parser.Parsing(audio,0,true));
+                List<Frame> frame = new List<Frame>();
+                long i = audio.Position;
+                bool isNoTrash = true; //Первая буква тега не NULL для того чтобы отсеять нулевые теги
+                while(i<header.Size && isNoTrash)
+                {
+                    frame.Add(new Frame(parser.Parsing(audio, i, false),header.Ver,i));
+                    i = i + 10 + frame[frame.Count-1].Size;
+                    audio.Seek(i, 0);
+                    isNoTrash = audio.ReadByte() > 32 ? true : false;
+                    audio.Seek(audio.Position-1,0);
+                }
+                Console.WriteLine(frame.Count);
             }
         }
     }

@@ -28,6 +28,8 @@ namespace ID3tag_Fix
         public Header(byte[] rawData)
         {
             ver = rawData[0];
+            OpNumber opNumber = new OpNumber();
+            size = opNumber.Arr7BitToNum(rawData);
         }
 
     }
